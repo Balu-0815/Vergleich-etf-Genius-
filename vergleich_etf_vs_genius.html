@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vergleich Einmalanlage 25.000 €: ETF vs. Württembergische Genius Vorsorge</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#0f1730;
+      --panel2:#101b38;
+      --text:#e9eefc;
+      --muted:#b9c3e3;
+      --line:#22305a;
+      --good:#3ddc97;
+      --bad:#ff6b6b;
+      --accent:#7aa7ff;
+      --accent2:#ffd166;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background: radial-gradient(1200px 700px at 20% 0%, #14204a 0%, var(--bg) 55%) fixed;
+      color:var(--text);
+      line-height:1.35;
+    }
+    .wrap{max-width:1100px; margin:32px auto; padding:0 18px 48px;}
+    header{
+      display:flex; gap:16px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+    .title{
+      min-width:280px; flex:1;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      padding:18px 18px 14px;
+    }
+    h1{font-size:20px; margin:0 0 6px; letter-spacing:.2px;}
+    .subtitle{color:var(--muted); font-size:13px; margin:0;}
+    .badgeRow{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end;}
+    .badge{
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      padding:10px 12px;
+      border-radius:999px;
+      font-size:12px;
+      color:var(--muted);
+      box-shadow:0 8px 18px rgba(0,0,0,.25);
+      white-space:nowrap;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:14px;
+      color:var(--text);
+      letter-spacing:.2px;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--muted);
+      font-size:12px;
+      margin:6px 8px 0 0;
+    }
+    .dot{width:10px; height:10px; border-radius:999px; display:inline-block;}
+    .dot.etf{background:var(--good)}
+    .dot.genius{background:var(--accent)}
+    .dot.warn{background:var(--accent2)}
+    .kpiRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    @media (max-width: 980px){
+      .kpiRow{grid-template-columns:1fr}
+    }
+    .kpi{
+      background: rgba(10, 16, 36, .55);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      padding:12px;
+    }
+    .kpi .label{color:var(--muted); font-size:12px;}
+    .kpi .value{font-size:18px; margin-top:6px; font-weight:700;}
+    .kpi .hint{color:var(--muted); font-size:12px; margin-top:6px;}
+    .value.good{color:var(--good)}
+    .value.bad{color:var(--bad)}
+    .value.accent{color:var(--accent)}
+    .small{font-size:12px; color:var(--muted)}
+    .controls{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    @media (max-width: 700px){
+      .controls{grid-template-columns:1fr}
+    }
+    .ctrl{
+      background: rgba(10, 16, 36, .55);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      padding:12px;
+    }
+    .ctrl label{display:flex; justify-content:space-between; gap:12px; align-items:baseline; font-size:12px; color:var(--muted)}
+    .ctrl input[type="range"]{width:100%; margin-top:10px}
+    .ctrl .readout{font-family:var(--mono); font-size:12px; color:var(--text)}
+    .note{
+      margin-top:10px;
+      padding:12px;
+      border-radius:14px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--muted);
+      font-size:12px;
+    }
+    .tableWrap{overflow:auto; border-radius:14px; border:1px solid rgba(255,255,255,.10);}
+    table{width:100%; border-collapse:collapse; min-width:720px; background: rgba(10, 16, 36, .35);}
+    th, td{padding:10px 10px; border-bottom:1px solid rgba(255,255,255,.08); text-align:right; font-size:12px;}
+    th{position:sticky; top:0; background: rgba(15, 23, 48, .95); color:var(--muted); text-transform:uppercase; letter-spacing:.08em; font-size:11px;}
+    td:first-child, th:first-child{text-align:left}
+    tr:hover td{background: rgba(255,255,255,.03)}
+    .tag{
+      display:inline-block; padding:5px 8px; border-radius:999px; font-size:11px;
+      border:1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.05); color:var(--muted)
+    }
+    .tag.win{color:rgba(61,220,151,.95); border-color: rgba(61,220,151,.30); background: rgba(61,220,151,.08)}
+    .tag.loss{color:rgba(255,107,107,.95); border-color: rgba(255,107,107,.30); background: rgba(255,107,107,.08)}
+    .chartBox{padding:10px; border-radius:14px; background: rgba(10, 16, 36, .55); border:1px solid rgba(255,255,255,.10);}
+    svg{max-width:100%; height:auto; display:block}
+    .legend{display:flex; gap:12px; flex-wrap:wrap; margin-top:10px}
+    .divider{height:1px; background: rgba(255,255,255,.10); margin:12px 0;}
+    .footer{
+      margin-top:16px;
+      color:var(--muted);
+      font-size:11px;
+    }
+    .printHint{
+      margin-top:10px;
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+    }
+    .btn{
+      appearance:none; border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:12px;
+      box-shadow: 0 10px 18px rgba(0,0,0,.25);
+    }
+    .btn:hover{background: rgba(255,255,255,.08)}
+    @media print{
+      body{background:#fff; color:#111}
+      .wrap{max-width:none; margin:0; padding:0}
+      .card, .title{box-shadow:none}
+      .btn, .printHint{display:none}
+      .badge{box-shadow:none}
+      .tableWrap{border-color:#ddd}
+      table{background:#fff}
+      th{background:#f5f5f5; color:#333}
+      th, td{border-bottom:1px solid #e5e5e5}
+      .chartBox, .ctrl, .kpi{background:#fff; border-color:#e5e5e5}
+      .subtitle, .small, .note, .footer, .badge, .pill, .label, .hint{color:#444}
+      .title{border-color:#e5e5e5}
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="title">
+      <h1>Vergleich Einmalanlage 25.000 €: ETF MSCI World vs. Württembergische Genius Vorsorge</h1>
+      <p class="subtitle">Ziel: Eine visuell klare, belastbare Gegenüberstellung für ein Beratungsgespräch. Schwerpunkt: Netto Endvermögen nach Kosten und Steuern.</p>
+      <div style="margin-top:10px">
+        <span class="pill"><span class="dot warn"></span>Kapitalauszahlung</span>
+        <span class="pill"><span class="dot warn"></span>Anlagehorizont 29 Jahre</span>
+        <span class="pill"><span class="dot warn"></span>Start heute, Ende 2055</span>
+      </div>
+    </div>
+    <div class="badgeRow">
+      <div class="badge">Geburtsdatum: <b>09.01.1988</b></div>
+      <div class="badge">Rentenbeginn: <b>67 Jahre</b></div>
+      <div class="badge">Bruttoeinkommen: <b>ca. 90.000 €</b></div>
+      <div class="badge">Einmalanlage: <b>25.000 €</b></div>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <section class="card">
+      <h2>Ergebnis auf einen Blick</h2>
+
+      <div class="kpiRow">
+        <div class="kpi">
+          <div class="label">ETF Netto Endvermögen</div>
+          <div class="value good" id="kpiEtfNet">114.100 €</div>
+          <div class="hint">Abgeltungssteuer auf Gewinne</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Genius Netto Endvermögen</div>
+          <div class="value accent" id="kpiGenNet">95.200 €</div>
+          <div class="hint">Halbeinkünfte bei Auszahlung ab 62 und Laufzeit 12 Jahre</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Vorsprung ETF</div>
+          <div class="value bad" id="kpiDiff">18.900 €</div>
+          <div class="hint">Haupttreiber ist der Kostenvorteil des ETFs</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="chartBox">
+        <h2 style="margin:0 0 10px">Vermögensentwicklung über die Zeit</h2>
+        <div class="small">Linien zeigen den Brutto Depotwert vor Steuern. Die Netto Werte werden unten in Tabellen gezeigt. Annahmen sind rechts anpassbar.</div>
+        <div style="margin-top:10px">
+          <svg id="lineChart" viewBox="0 0 900 360" aria-label="Linienchart ETF vs Genius"></svg>
+          <div class="legend">
+            <span class="pill"><span class="dot etf"></span>ETF (niedrige Kosten)</span>
+            <span class="pill"><span class="dot genius"></span>Genius (höhere Kosten)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="chartBox">
+        <h2 style="margin:0 0 10px">Netto Endvermögen Vergleich</h2>
+        <svg id="barChart" viewBox="0 0 900 260" aria-label="Balkenchart Netto Endvermögen"></svg>
+      </div>
+
+      <div class="printHint">
+        <div class="small">Tipp: Über den Button kannst du das Dokument sauber als PDF drucken, ideal für das Gespräch.</div>
+        <button class="btn" onclick="window.print()">Drucken oder als PDF speichern</button>
+      </div>
+
+    </section>
+
+    <aside class="card">
+      <h2>Annahmen und Stellschrauben</h2>
+
+      <div class="note">
+        Diese Seite rechnet nicht mit Marketing Aussagen, sondern mit dem, was am Ende zählt: Netto Vermögen nach Kosten und Steuern. Du kannst die wichtigsten Parameter anpassen, um zu zeigen, ab wann sich das Versicherungsprodukt theoretisch lohnen würde.
+      </div>
+
+      <div class="controls">
+        <div class="ctrl">
+          <label>
+            <span>Bruttomarktrendite p. a.</span>
+            <span class="readout" id="roMarket">6,5 %</span>
+          </label>
+          <input id="market" type="range" min="3" max="10" step="0.1" value="6.5" />
+          <div class="small">Gilt für beide Varianten vor Produktkosten.</div>
+        </div>
+
+        <div class="ctrl">
+          <label>
+            <span>ETF Kosten p. a.</span>
+            <span class="readout" id="roEtfFee">0,20 %</span>
+          </label>
+          <input id="etfFee" type="range" min="0.05" max="0.60" step="0.01" value="0.20" />
+          <div class="small">Typisch 0,10 bis 0,30 Prozent.</div>
+        </div>
+
+        <div class="ctrl">
+          <label>
+            <span>Genius Kosten p. a.</span>
+            <span class="readout" id="roGenFee">1,50 %</span>
+          </label>
+          <input id="genFee" type="range" min="0.60" max="2.50" step="0.05" value="1.50" />
+          <div class="small">Enthält Abschluss, Verwaltung, Fondskosten im Mantel.</div>
+        </div>
+
+        <div class="ctrl">
+          <label>
+            <span>Steuersatz im Alter</span>
+            <span class="readout" id="roTax">20 %</span>
+          </label>
+          <input id="taxRate" type="range" min="0" max="42" step="1" value="20" />
+          <div class="small">Genius: 50 Prozent der Erträge steuerpflichtig. ETF: Abgeltungssteuer auf Gewinne.</div>
+        </div>
+
+        <div class="ctrl">
+          <label>
+            <span>Abgeltungssteuer gesamt</span>
+            <span class="readout" id="roCapTax">26,38 %</span>
+          </label>
+          <input id="capTax" type="range" min="0" max="30" step="0.01" value="26.375" />
+          <div class="small">Standard ist 26,375 Prozent inkl. Soli, ohne Kirchensteuer.</div>
+        </div>
+
+        <div class="ctrl">
+          <label>
+            <span>Anlagejahre</span>
+            <span class="readout" id="roYears">29</span>
+          </label>
+          <input id="years" type="range" min="10" max="40" step="1" value="29" />
+          <div class="small">Standard: heute bis 67 Jahre.</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2>Ergebnis Tabellen</h2>
+
+      <div class="tableWrap" style="margin-top:10px">
+        <table id="summaryTable">
+          <thead>
+            <tr>
+              <th>Variante</th>
+              <th>Endwert vor Steuer</th>
+              <th>Gewinn</th>
+              <th>Steuer</th>
+              <th>Netto Endvermögen</th>
+              <th>Bewertung</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2>Sensitivität Steuersatz im Alter</h2>
+      <div class="small">Zeigt, wie stark der Genius vom persönlichen Steuersatz profitiert und warum das in der Praxis selten reicht, um die Mehrkosten zu schlagen.</div>
+
+      <div class="tableWrap" style="margin-top:10px">
+        <table id="taxSensitivity">
+          <thead>
+            <tr>
+              <th>Steuersatz</th>
+              <th>Genius Netto</th>
+              <th>ETF Netto</th>
+              <th>Vorsprung ETF</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="footer">
+        Hinweis: Diese Seite ist ein Vergleichsmodell. Keine Anlageberatung. Kosten für Genius werden als effektive Jahreskosten angenähert. Bei echten Verträgen können Kosten zeitlich verteilt sein, der Renditenachteil bleibt bei höheren Gesamtkosten jedoch strukturell bestehen.
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<script>
+  const fmtEUR = new Intl.NumberFormat("de-DE", { style:"currency", currency:"EUR", maximumFractionDigits:0 });
+  const fmtPct1 = (x)=> (x).toLocaleString("de-DE", {maximumFractionDigits:2}) + " %";
+  const state = {
+    principal: 25000,
+    market: 6.5,
+    etfFee: 0.20,
+    genFee: 1.50,
+    taxRate: 20,
+    capTax: 26.375,
+    years: 29
+  };
+  const el = (id)=> document.getElementById(id);
+  function futureValue(P, rNet, n){
+    const r = rNet / 100;
+    return P * Math.pow(1 + r, n);
+  }
+  function compute(){
+    const P = state.principal;
+    const n = state.years;
+    const etfNetRate = state.market - state.etfFee;
+    const genNetRate = state.market - state.genFee;
+    const etfEnd = futureValue(P, etfNetRate, n);
+    const genEnd = futureValue(P, genNetRate, n);
+    const etfGain = Math.max(0, etfEnd - P);
+    const genGain = Math.max(0, genEnd - P);
+    const etfTax = etfGain * (state.capTax / 100);
+    const genTax = (genGain * 0.5) * (state.taxRate / 100);
+    const etfNet = etfEnd - etfTax;
+    const genNet = genEnd - genTax;
+    const diff = etfNet - genNet;
+    return {
+      etf:{ end:etfEnd, gain:etfGain, tax:etfTax, net:etfNet, rate:etfNetRate },
+      gen:{ end:genEnd, gain:genGain, tax:genTax, net:genNet, rate:genNetRate },
+      diff
+    };
+  }
+  function setReadouts(){
+    el("roMarket").textContent = fmtPct1(state.market);
+    el("roEtfFee").textContent = fmtPct1(state.etfFee);
+    el("roGenFee").textContent = fmtPct1(state.genFee);
+    el("roTax").textContent = fmtPct1(state.taxRate);
+    el("roCapTax").textContent = fmtPct1(state.capTax);
+    el("roYears").textContent = String(state.years);
+  }
+  function updateKPIs(res){
+    el("kpiEtfNet").textContent = fmtEUR.format(res.etf.net);
+    el("kpiGenNet").textContent = fmtEUR.format(res.gen.net);
+    const d = res.diff;
+    el("kpiDiff").textContent = fmtEUR.format(Math.abs(d));
+  }
+  function renderSummaryTable(res){
+    const tbody = el("summaryTable").querySelector("tbody");
+    tbody.innerHTML = "";
+    const rows = [
+      { name:"ETF MSCI World", end:res.etf.end, gain:res.etf.gain, tax:res.etf.tax, net:res.etf.net, win: res.etf.net >= res.gen.net },
+      { name:"Württembergische Genius", end:res.gen.end, gain:res.gen.gain, tax:res.gen.tax, net:res.gen.net, win: res.gen.net > res.etf.net }
+    ];
+    for(const r of rows){
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${r.name}</td>
+        <td>${fmtEUR.format(r.end)}</td>
+        <td>${fmtEUR.format(r.gain)}</td>
+        <td>${fmtEUR.format(r.tax)}</td>
+        <td><b>${fmtEUR.format(r.net)}</b></td>
+        <td>${r.win ? `<span class="tag win">Gewinner</span>` : `<span class="tag loss">unterlegen</span>`}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+  }
+  function renderTaxSensitivity(){
+    const tbody = el("taxSensitivity").querySelector("tbody");
+    tbody.innerHTML = "";
+    const rates = [0,5,10,15,20,25,30,35,40];
+    for(const t of rates){
+      const tmp = {...state, taxRate:t};
+      const P = tmp.principal;
+      const n = tmp.years;
+      const etfNetRate = tmp.market - tmp.etfFee;
+      const genNetRate = tmp.market - tmp.genFee;
+      const etfEnd = futureValue(P, etfNetRate, n);
+      const genEnd = futureValue(P, genNetRate, n);
+      const etfGain = Math.max(0, etfEnd - P);
+      const genGain = Math.max(0, genEnd - P);
+      const etfTax = etfGain * (tmp.capTax / 100);
+      const genTax = (genGain * 0.5) * (t / 100);
+      const etfNet = etfEnd - etfTax;
+      const genNet = genEnd - genTax;
+      const diff = etfNet - genNet;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${t.toLocaleString("de-DE")} %</td>
+        <td>${fmtEUR.format(genNet)}</td>
+        <td>${fmtEUR.format(etfNet)}</td>
+        <td><b>${fmtEUR.format(Math.abs(diff))}</b> ${diff >= 0 ? `<span class="tag win">ETF vorn</span>` : `<span class="tag loss">Genius vorn</span>`}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+  }
+  function renderLineChart(res){
+    const svg = el("lineChart");
+    svg.innerHTML = "";
+    const W = 900, H = 360;
+    const pad = {l:54, r:20, t:20, b:44};
+    const plotW = W - pad.l - pad.r;
+    const plotH = H - pad.t - pad.b;
+    const n = state.years;
+    const years = Array.from({length:n+1}, (_,i)=> i);
+    const etfSeries = years.map(y => futureValue(state.principal, res.etf.rate, y));
+    const genSeries = years.map(y => futureValue(state.principal, res.gen.rate, y));
+    const maxY = Math.max(...etfSeries, ...genSeries) * 1.05;
+    const minY = Math.min(state.principal, ...etfSeries, ...genSeries) * 0.98;
+    const x = (i)=> pad.l + (i / n) * plotW;
+    const y = (v)=> pad.t + (1 - (v - minY) / (maxY - minY)) * plotH;
+
+    const grid = document.createElementNS("http://www.w3.org/2000/svg","g");
+    const gridLines = 5;
+    for(let i=0;i<=gridLines;i++){
+      const yy = pad.t + (i/gridLines)*plotH;
+      const line = document.createElementNS("http://www.w3.org/2000/svg","line");
+      line.setAttribute("x1", pad.l);
+      line.setAttribute("x2", W - pad.r);
+      line.setAttribute("y1", yy);
+      line.setAttribute("y2", yy);
+      line.setAttribute("stroke", "rgba(255,255,255,.10)");
+      line.setAttribute("stroke-width", "1");
+      grid.appendChild(line);
+
+      const v = maxY - (i/gridLines)*(maxY-minY);
+      const label = document.createElementNS("http://www.w3.org/2000/svg","text");
+      label.setAttribute("x", 6);
+      label.setAttribute("y", yy + 4);
+      label.setAttribute("fill", "rgba(233,238,252,.75)");
+      label.setAttribute("font-size", "11");
+      label.setAttribute("font-family", "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace");
+      label.textContent = fmtEUR.format(v);
+      grid.appendChild(label);
+    }
+    svg.appendChild(grid);
+
+    const xg = document.createElementNS("http://www.w3.org/2000/svg","g");
+    const ticks = Math.min(8, n);
+    for(let i=0;i<=ticks;i++){
+      const idx = Math.round((i/ticks)*n);
+      const xx = x(idx);
+      const t = document.createElementNS("http://www.w3.org/2000/svg","text");
+      t.setAttribute("x", xx);
+      t.setAttribute("y", H - 16);
+      t.setAttribute("text-anchor","middle");
+      t.setAttribute("fill","rgba(233,238,252,.75)");
+      t.setAttribute("font-size","11");
+      t.setAttribute("font-family", "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace");
+      t.textContent = String(idx) + " J";
+      xg.appendChild(t);
+
+      const tick = document.createElementNS("http://www.w3.org/2000/svg","line");
+      tick.setAttribute("x1", xx);
+      tick.setAttribute("x2", xx);
+      tick.setAttribute("y1", H - pad.b);
+      tick.setAttribute("y2", H - pad.b + 6);
+      tick.setAttribute("stroke","rgba(255,255,255,.12)");
+      tick.setAttribute("stroke-width","1");
+      xg.appendChild(tick);
+    }
+    svg.appendChild(xg);
+
+    function pathFrom(series){
+      return series.map((v,i)=> (i===0 ? "M" : "L") + x(i).toFixed(2) + " " + y(v).toFixed(2)).join(" ");
+    }
+
+    const area = document.createElementNS("http://www.w3.org/2000/svg","path");
+    const etfPath = pathFrom(etfSeries);
+    const etfArea = etfPath + ` L ${x(n).toFixed(2)} ${(H-pad.b).toFixed(2)} L ${x(0).toFixed(2)} ${(H-pad.b).toFixed(2)} Z`;
+    area.setAttribute("d", etfArea);
+    area.setAttribute("fill", "rgba(61,220,151,.08)");
+    svg.appendChild(area);
+
+    const pGen = document.createElementNS("http://www.w3.org/2000/svg","path");
+    pGen.setAttribute("d", pathFrom(genSeries));
+    pGen.setAttribute("fill","none");
+    pGen.setAttribute("stroke", getComputedStyle(document.documentElement).getPropertyValue("--accent").trim());
+    pGen.setAttribute("stroke-width","3");
+    pGen.setAttribute("stroke-linecap","round");
+    svg.appendChild(pGen);
+
+    const pEtf = document.createElementNS("http://www.w3.org/2000/svg","path");
+    pEtf.setAttribute("d", etfPath);
+    pEtf.setAttribute("fill","none");
+    pEtf.setAttribute("stroke", getComputedStyle(document.documentElement).getPropertyValue("--good").trim());
+    pEtf.setAttribute("stroke-width","3.5");
+    pEtf.setAttribute("stroke-linecap","round");
+    svg.appendChild(pEtf);
+
+    const base = document.createElementNS("http://www.w3.org/2000/svg","line");
+    base.setAttribute("x1", pad.l);
+    base.setAttribute("x2", W - pad.r);
+    base.setAttribute("y1", H - pad.b);
+    base.setAttribute("y2", H - pad.b);
+    base.setAttribute("stroke","rgba(255,255,255,.12)");
+    base.setAttribute("stroke-width","1");
+    svg.appendChild(base);
+  }
+  function renderBarChart(res){
+    const svg = el("barChart");
+    svg.innerHTML = "";
+    const W = 900, H = 260;
+    const pad = {l:54, r:20, t:18, b:44};
+    const plotW = W - pad.l - pad.r;
+    const plotH = H - pad.t - pad.b;
+    const vals = [
+      {name:"ETF", v:res.etf.net, color:getComputedStyle(document.documentElement).getPropertyValue("--good").trim()},
+      {name:"Genius", v:res.gen.net, color:getComputedStyle(document.documentElement).getPropertyValue("--accent").trim()}
+    ];
+    const maxV = Math.max(...vals.map(d=>d.v)) * 1.15;
+    const x0 = pad.l, y0 = H - pad.b;
+    const barW = plotW / 5;
+    const gap = barW * 0.9;
+
+    const grid = document.createElementNS("http://www.w3.org/2000/svg","g");
+    for(let i=0;i<=4;i++){
+      const yy = pad.t + (i/4)*plotH;
+      const line = document.createElementNS("http://www.w3.org/2000/svg","line");
+      line.setAttribute("x1", pad.l);
+      line.setAttribute("x2", W - pad.r);
+      line.setAttribute("y1", yy);
+      line.setAttribute("y2", yy);
+      line.setAttribute("stroke", "rgba(255,255,255,.10)");
+      line.setAttribute("stroke-width", "1");
+      grid.appendChild(line);
+    }
+    svg.appendChild(grid);
+
+    vals.forEach((d, i)=>{
+      const x = x0 + i*(barW+gap) + barW;
+      const h = (d.v / maxV) * plotH;
+      const y = y0 - h;
+
+      const rect = document.createElementNS("http://www.w3.org/2000/svg","rect");
+      rect.setAttribute("x", x);
+      rect.setAttribute("y", y);
+      rect.setAttribute("width", barW);
+      rect.setAttribute("height", h);
+      rect.setAttribute("rx", "12");
+      rect.setAttribute("fill", d.color);
+      rect.setAttribute("opacity", "0.92");
+      svg.appendChild(rect);
+
+      const label = document.createElementNS("http://www.w3.org/2000/svg","text");
+      label.setAttribute("x", x + barW/2);
+      label.setAttribute("y", y0 + 22);
+      label.setAttribute("text-anchor","middle");
+      label.setAttribute("fill","rgba(233,238,252,.85)");
+      label.setAttribute("font-size","12");
+      label.setAttribute("font-family", "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace");
+      label.textContent = d.name;
+      svg.appendChild(label);
+
+      const val = document.createElementNS("http://www.w3.org/2000/svg","text");
+      val.setAttribute("x", x + barW/2);
+      val.setAttribute("y", y - 8);
+      val.setAttribute("text-anchor","middle");
+      val.setAttribute("fill","rgba(233,238,252,.95)");
+      val.setAttribute("font-size","12");
+      val.setAttribute("font-family", "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace");
+      val.textContent = fmtEUR.format(d.v);
+      svg.appendChild(val);
+    });
+
+    const base = document.createElementNS("http://www.w3.org/2000/svg","line");
+    base.setAttribute("x1", pad.l);
+    base.setAttribute("x2", W - pad.r);
+    base.setAttribute("y1", y0);
+    base.setAttribute("y2", y0);
+    base.setAttribute("stroke","rgba(255,255,255,.12)");
+    base.setAttribute("stroke-width","1");
+    svg.appendChild(base);
+  }
+  function bind(){
+    const map = [
+      ["market","market"],
+      ["etfFee","etfFee"],
+      ["genFee","genFee"],
+      ["taxRate","taxRate"],
+      ["capTax","capTax"],
+      ["years","years"]
+    ];
+    for(const [id, key] of map){
+      const input = el(id);
+      input.addEventListener("input", ()=>{
+        state[key] = parseFloat(input.value);
+        refresh();
+      });
+    }
+  }
+  function refresh(){
+    setReadouts();
+    const res = compute();
+    updateKPIs(res);
+    renderSummaryTable(res);
+    renderTaxSensitivity();
+    renderLineChart(res);
+    renderBarChart(res);
+  }
+
+  el("market").value = state.market;
+  el("etfFee").value = state.etfFee;
+  el("genFee").value = state.genFee;
+  el("taxRate").value = state.taxRate;
+  el("capTax").value = state.capTax;
+  el("years").value = state.years;
+
+  bind();
+  refresh();
+</script>
+</body>
+</html>
